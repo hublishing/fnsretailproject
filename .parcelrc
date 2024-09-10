@@ -1,7 +1,15 @@
 {
-  "extends": "@parcel/config-default",
-  "transformers": {
-    "*.js": ["@parcel/transformer-js"],
-    "node-modules/aws-amplify/**": ["@parcel/transformer-js"]
+    "extends": "@parcel/config-default",
+    "transformers": {
+      "*.js": [
+        "@parcel/transformer-js",
+        {
+          "global": {
+            "process": "process/browser",
+            "Buffer": "buffer"
+          }
+        }
+      ]
+    }
   }
-}
+  

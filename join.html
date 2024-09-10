@@ -44,22 +44,35 @@
         const signupForm = document.getElementById('signup-form');
         const errorText = document.getElementById('errortext');
 
+        // HMAC SHA256 알고리즘을 사용한 SECRET_HASH 생성 함수
+        function generateSecretHash(username, clientId, clientSecret) {
+            return CryptoJS.HmacSHA256(username + clientId, clientSecret).toString(CryptoJS.enc.Base64);
+        }
+
         signupForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Cognito Identity Service Provider 설정
+            // App Client ID 및 App Client Secret 설정
+            const clientId = '122g2i26b7erslg90ut69s227l';  // App Client ID
+            const clientSecret = '1k58hsg4v7r0poce85l98cong6aksfggs1n4opmsjb56q98t9bvq';  // App Client Secret
+
+            // SECRET_HASH 생성
+            const secretHash = generateSecretHash(email, clientId, clientSecret);
+
+            // AWS Cognito를 위한 서비스 프로바이더 생성
             const cognito = new AWS.CognitoIdentityServiceProvider();
 
             const params = {
-                ClientId: '122g2i26b7erslg90ut69s227l',  // Cognito 사용자 풀의 App Client ID (올바르게 입력되었는지 확인 필요)
+                ClientId: clientId,
+                SecretHash: secretHash,  // 생성된 Secret Hash 추가
                 Username: email,
                 Password: password,
                 UserAttributes: [
                     {
-                        Name: 'email',  // AWS Cognito 사용자 풀에서 확인할 속성
+                        Name: 'email',
                         Value: email
                     }
                 ]
@@ -80,5 +93,9 @@
             });
         });
     </script>
+
+    <!-- CryptoJS 라이브러리 추가 (HMAC SHA256 해시 생성에 필요) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+
 </body>
 </html>

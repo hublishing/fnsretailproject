@@ -1,7 +1,10 @@
-import Amplify, { Auth } from 'aws-amplify';
-import awsconfig from './aws-exports';  // AWS 설정 파일
+// CDN을 통해 aws-amplify를 불러오기
+import Amplify, { Auth } from 'https://cdn.jsdelivr.net/npm/aws-amplify@4.3.11/dist/aws-amplify.min.js';
 
-Amplify.configure(awsconfig);
+// aws-exports 설정 파일 불러오기
+import awsmobile from './aws-exports.js';
+
+Amplify.configure(awsmobile);
 
 // 회원가입 함수
 const signUp = async (event) => {

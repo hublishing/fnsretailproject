@@ -1,5 +1,5 @@
-import Amplify, { Auth } from '/node_modules/aws-amplify'; 
-import awsconfig from './aws-exports';  // AWS 설정 파일
+import Amplify, { Auth } from 'node_modules\@aws-amplify'; 
+import awsconfig from 'public\js\aws-exports.js';  // AWS 설정 파일
 
 Amplify.configure(awsconfig);
 

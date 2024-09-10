@@ -37,10 +37,6 @@
     <script>
         // AWS SDK 및 자격 증명 풀 설정
         AWS.config.region = 'ap-northeast-2'; // 리전 설정
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: 'ap-northeast-2:f9436d0a-34cf-4825-a198-188ec11c41b7' // 자격 증명 풀 ID
-        });
-
         const loginForm = document.getElementById('login-form');
         const errorText = document.getElementById('errortext');
 
@@ -50,7 +46,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // App Client 정보 (SecretHash는 제거)
+            // App Client 정보 (SecretHash는 필요 없으면 생략)
             const clientId = '122g2i26b7erslg90ut69s227l';  // App Client ID
 
             // Cognito Identity Service Provider 생성
@@ -69,10 +65,10 @@
             // Cognito 로그인 API 호출
             cognito.initiateAuth(params, function(err, data) {
                 if (err) {
-                    console.log(err, err.stack);
+                    console.log('로그인 오류:', err, err.stack);
                     errorText.innerText = 'Error: ' + err.message;
                 } else {
-                    console.log(data);
+                    console.log('로그인 성공:', data);
                     const idToken = data.AuthenticationResult.IdToken;
 
                     // 로그인 후 자격 증명 설정
@@ -86,9 +82,9 @@
                     // 자격 증명 갱신
                     AWS.config.credentials.get(function(err) {
                         if (err) {
-                            console.log('Error retrieving credentials:', err);
+                            console.log('자격 증명 갱신 오류:', err);
                         } else {
-                            console.log('Successfully retrieved credentials:', AWS.config.credentials);
+                            console.log('자격 증명 성공:', AWS.config.credentials);
                             // 메인 페이지로 리다이렉션
                             window.location.href = '/main.html';
                         }

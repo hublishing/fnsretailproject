@@ -1,9 +1,7 @@
-import Amplify from 'aws-amplify';
-import { Auth } from 'aws-amplify';  // AWS 설정 파일
-import awsconfig from './aws-exports';  // AWS 설정 파일
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
 
 Amplify.configure(awsconfig);
-
 
 // 회원가입 함수
 const signUp = async (event) => {

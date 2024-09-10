@@ -1,23 +1,23 @@
-import Amplify from 'aws-amplify';
-import { Auth } from 'aws-amplify';  // AWS 설정 파일
-import awsconfig from './aws-exports';  // AWS 설정 파일
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
 
 Amplify.configure(awsconfig);
 
-
 // 로그인 함수
-const login = async () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+const login = async (event) => {
+  event.preventDefault();  // 폼 제출 기본 동작 방지
+
+  const email = document.querySelector('input[placeholder="email"]').value;
+  const password = document.querySelector('input[placeholder="password"]').value;
 
   try {
     const user = await Auth.signIn(email, password);
     console.log('로그인 성공:', user);
-    // 로그인 후 페이지 이동 등 작업 처리
+    window.location.href = '/dashboard.html';  // 로그인 성공 후 페이지 이동
   } catch (error) {
-    console.log('로그인 실패:', error);
-    // 오류 메시지 처리
+    console.error('로그인 실패:', error);
+    document.querySelector('.errortext').textContent = '로그인 실패: ' + error.message;
   }
 };
 
-document.getElementById('login-button').addEventListener('click', login);
+document.querySelector('form').addEventListener('submit', login);

@@ -1,34 +1,39 @@
-// 회원가입 함수
-const signUpUser = (email, password) => {
-  fetch('http://localhost:3000/signup', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('회원가입 성공:', data);
-      alert('회원가입이 완료되었습니다. 이메일 인증을 확인하세요.');
-      window.location.href = '/index.html'; // 회원가입 후 로그인 페이지로 이동
-    })
-    .catch((error) => {
-      console.error('회원가입 실패:', error);
-      document.querySelector('.errortext').textContent = '회원가입 실패: ' + error.message;
-    });
-};
+// AWS Amplify 설정
+Amplify.configure({
+  Auth: {
+    userPoolId: 'ap-northeast-2_4BBJiRrR9', // 사용자 풀 ID
+    userPoolWebClientId: '122g2i26b7erslg90ut69s227l', // 클라이언트 ID
+    region: 'ap-northeast-2', // 리전
+  }
+});
 
-// 폼 제출 이벤트 리스너
-document.querySelector('form').addEventListener('submit', (event) => {
-  event.preventDefault();  // 기본 제출 방지
+const signupForm = document.getElementById('signup-form');
+const errorText = document.getElementById('errortext');
 
-  // 사용자가 입력한 이메일과 패스워드 값 가져오기
-  const email = document.querySelector('input[placeholder="email"]').value;
-  const password = document.querySelector('input[placeholder="password"]').value;
+// 폼 제출 이벤트 처리
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-  signUpUser(email, password);
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+      // AWS Cognito 회원가입 요청
+      const result = await Amplify.Auth.signUp({
+          username: email,
+          password: password,
+          attributes: {
+              email: email // 사용자 속성 (필요 시 다른 속성도 추가 가능)
+          }
+      });
+
+      // 회원가입 성공 시 메시지 표시 후 로그인 페이지로 이동
+      errorText.innerText = '회원가입 성공! 로그인 페이지로 이동합니다.';
+      setTimeout(() => {
+          window.location.href = '/index.html';
+      }, 2000);
+  } catch (error) {
+      // 오류 발생 시 오류 메시지 표시
+      errorText.innerText = '오류: ' + error.message;
+  }
 });

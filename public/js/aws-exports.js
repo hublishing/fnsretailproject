@@ -6,3 +6,23 @@ Amplify.configure({
     }
   });
   
+  const signUp = async (event) => {
+    event.preventDefault();
+  
+    const email = document.querySelector('input[placeholder="email"]').value;
+    const password = document.querySelector('input[placeholder="password"]').value;
+  
+    try {
+      const { user } = await Amplify.Auth.signUp({
+        username: email,
+        password,
+        attributes: { email },
+      });
+      console.log('회원가입 성공:', user);
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+    }
+  };
+  
+  document.querySelector('form').addEventListener('submit', signUp);
+  

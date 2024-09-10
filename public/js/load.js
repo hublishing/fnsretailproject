@@ -1,5 +1,4 @@
-import { auth } from '../../firebase.js';  
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+ 
 
 // 사이드바 로드 및 초기화
 document.addEventListener("DOMContentLoaded", () => {

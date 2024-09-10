@@ -1,7 +1,5 @@
 // AWS Amplify 설정
 console.log("Amplify 설정을 시작합니다.");
-import Amplify from 'aws-amplify';
-import awsconfig from './aws-exports';  // AWS 설정을 포함한 파일
 
 Amplify.configure({
   Auth: {

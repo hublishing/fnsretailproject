@@ -50,12 +50,8 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // App Client 정보
+            // App Client 정보 (SecretHash는 제거)
             const clientId = '122g2i26b7erslg90ut69s227l';  // App Client ID
-            const clientSecret = '1k58hsg4v7r0poce85l98cong6aksfggs1n4opmsjb56q98t9bvq';  // App Client Secret
-
-            // SECRET_HASH 생성
-            const secretHash = CryptoJS.HmacSHA256(email + clientId, clientSecret).toString(CryptoJS.enc.Base64);
 
             // Cognito Identity Service Provider 생성
             const cognito = new AWS.CognitoIdentityServiceProvider();
@@ -64,7 +60,6 @@
             const params = {
                 AuthFlow: 'USER_PASSWORD_AUTH',
                 ClientId: clientId,
-                SecretHash: secretHash,  // 생성된 Secret Hash 추가
                 AuthParameters: {
                     USERNAME: email,
                     PASSWORD: password
@@ -92,9 +87,5 @@
             });
         });
     </script>
-
-    <!-- CryptoJS 라이브러리 추가 (HMAC SHA256 해시 생성에 필요) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-
 </body>
 </html>
